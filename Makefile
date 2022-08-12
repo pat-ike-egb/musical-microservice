@@ -10,7 +10,7 @@ cucumber:
 
 generate-proto: clean-generated
 	INPUT=./apis/grpc; \
-	OUTPUT=./$(APP)/generated; \
+	OUTPUT=./$(APP)/services/generated; \
 	mkdir $$OUTPUT; \
 	python3 -m grpc_tools.protoc \
 		-I $$INPUT \
