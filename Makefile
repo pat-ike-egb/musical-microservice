@@ -1,12 +1,12 @@
 APP := musical_microservice
 
 test:
-	@pytest
+	PYTHONPATH=. pytest
 
 cucumber:
 	@behave
 
-.PHONY: clean generate-proto clean-generated
+.PHONY: clean generate-proto clean-generated test
 
 generate-proto: clean-generated
 	INPUT=./apis/grpc; \
@@ -24,7 +24,7 @@ generate-proto: clean-generated
 #build-prod:
 
 clean-generated:
-	rm -rf ./generated ./**/generated
+	rm -rf ./generated ./**/*/generated
 
 clean: clean-generated
 	rm -rf .pytest_cache .coverage .pytest_cache coverage.xml
