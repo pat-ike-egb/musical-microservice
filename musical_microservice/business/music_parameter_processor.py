@@ -44,7 +44,4 @@ class MusicParameterProcessor:
         :param form:
         :return:
         """
-        return MusicalParameters(
-            self.get_tempo(form),
-            self.get_time_signature()
-        )
+        return MusicalParameters(self.get_tempo(form), self.get_time_signature())

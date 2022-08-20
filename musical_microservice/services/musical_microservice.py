@@ -1,5 +1,6 @@
 import grpc
 
+import musical_microservice.models.util
 from generated.musical_server_pb2 import (
     MusicalParameters,
     TimeSignature,
@@ -22,6 +23,10 @@ class MusicalService(generated.musical_server_pb2_grpc.MusicalServerServicer):
         self.musical_parameter_processer : MusicParameterProcessor = musical_parameter_processor
 
     def GenerateMusicalFormParameters(self, request : GenerateMusicalFormParametersRequest, context):
-        self.musical_parameter_processer.generate_musical_parameters(request.form) # TODO: convert function for grpc -> business model
+        parameters = self.musical_parameter_processer.generate_musical_parameters(
+         musical_microservice.models.util.convert_form_pb_to_model(request.form)
+        )
 
-        return GenerateMusicalFormParametersResponse(parameters)
+        return GenerateMusicalFormParametersResponse(
+            musical_microservice.models.util.convert_musical_parameters_model_to_pb(parameters)
+        )
