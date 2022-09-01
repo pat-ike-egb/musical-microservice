@@ -1,8 +1,8 @@
 import random
 import numpy as np
-
+import music21 as m21
 from musical_microservice.models.musical_parameters import(
-    MusicalForm, MusicalParameters, Tempo, TimeSignature
+    MusicalForm, MusicalParameters
 )
 
 class MusicParameterProcessor:
@@ -14,9 +14,9 @@ class MusicParameterProcessor:
             MusicalForm.SCHERZO : (130, 179)
         }
 
-        self.time_signatures = [(3, 4), (6, 8)]
+        self.time_signatures = ['3/4', '6/8']
 
-    def get_tempo(self, form) -> Tempo:
+    def get_tempo(self, form) -> m21.tempo.MetronomeMark:
         """
         TODO
         :param form:
@@ -25,18 +25,17 @@ class MusicParameterProcessor:
         if form in self.tempo_by_form: #TODO: look into better input validation practices
             low, high = self.tempo_by_form[form]
             tempo = np.random.randint(low, high)
-            return Tempo(tempo)
+            return m21.tempo.MetronomeMark(number=tempo)
         raise ValueError(f'{form} is not a valid musical form')
         #TODO: make a class for business-layer errors, that map to service-layer errors
 
-    def get_time_signature(self) -> TimeSignature:
+    def get_time_signature(self) -> m21.meter.TimeSignature:
         """
         TODO
         :return:
         """
         # TODO: naive implementation that passes test
-        num_beats, beat_value = self.time_signatures[0]
-        return TimeSignature(num_beats, beat_value)
+        return m21.meter.TimeSignature(self.time_signatures[0])
 
     def generate_musical_parameters(self, form) -> MusicalParameters:
         """
