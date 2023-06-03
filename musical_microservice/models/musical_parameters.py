@@ -7,13 +7,16 @@ class MusicalForm(Enum):
     SCHERZO = 3
 
 class MusicalParameters:
-    def __init__(self, tempo, time_signature):
+    def __init__(self, tempo, time_signature, key_signature):
         self.tempo : m21.tempo.MetronomeMark = tempo
         self.time_signature : m21.meter.TimeSignature = time_signature
+        self.key_signature : m21.key.KeySignature = key_signature
 
     def __eq__(self, other):
         if isinstance(other, MusicalParameters):
-            return self.tempo == other.tempo and self.time_signature == other.time_signature
+            return self.tempo == other.tempo and \
+                self.time_signature == other.time_signature and \
+                self.key_signature == other.key_signature
         return NotImplemented
 
     def __hash__(self):
