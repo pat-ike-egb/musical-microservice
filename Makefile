@@ -16,7 +16,7 @@ generate-proto: clean-generated
 		-I $$INPUT \
         --python_out=$$OUTPUT \
         --grpc_python_out=$$OUTPUT \
-        $$INPUT/musical_server.proto; \
+        $$INPUT/*.proto; \
 	sed -i -E 's/^import.*_pb2/from . \0/' $$OUTPUT/*.py
 
 #build-dev:
