@@ -10,4 +10,5 @@ class AudioService(generated.audio_server_pb2_grpc.AudioServerServicer):
         self.channels = {}
 
     def connect(self, request : ConnectRequest, context):
+        # audio should be buffered, perhaps it's the clients job to buffer the audio
         return

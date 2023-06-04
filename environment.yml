@@ -44,6 +44,7 @@ dependencies:
       - grpcio==1.54.2
       - idna==3.4
       - iniconfig==2.0.0
+      - jmespath==1.0.1
       - joblib==1.2.0
       - jsonpickle==3.0.1
       - kiwisolver==1.4.4
@@ -61,5 +62,6 @@ dependencies:
       - python-dateutil==2.8.2
       - requests==2.31.0
       - urllib3==2.0.2
+      - wave==0.0.2
       - webcolors==1.13
 prefix: /home/pegbuchulam/miniconda3/envs/py3.10

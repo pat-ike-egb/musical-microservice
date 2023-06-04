@@ -4,8 +4,9 @@ class Music:
     General Music file and metadata information
     """
     def __init__(self, wav_path):
-        self.wav = wave.open(r"/usr/share/sounds/alsa/Rear_Center.wav", "rb")
-        self.parameter_graph = {}
+        self.wav = wave.open(fr"{wav_path}", "rb")
+        self.wav.tell()
+        self.parameter_annotations = {}
 
 
 class Vamp(Music):
@@ -26,5 +27,6 @@ class Composition(Music):
     """
     lengthy, non-repeatable body of work
     """
-    def __init__(self, wav_path):
+    def __init__(self, wav_path, title):
         super(Composition, self).__init__(wav_path)
+        self.title = title

@@ -1,0 +1,17 @@
+{
+  "music" : [
+    {
+      "path": "../piano_concerto_no_1_wip.wav",
+      "type": "composition",
+      "title" : "Piano Concerto No. 1",
+      "parameter_annotations": [
+        {
+          "timestamp": "0.0",
+          "key_signature": "C_MAJOR",
+          "time_signature": "4/4",
+          "tempo": "74"
+        }
+      ]
+    }
+  ]
+}
