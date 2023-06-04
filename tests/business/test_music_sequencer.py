@@ -1,13 +1,14 @@
 import unittest
 import json
+import os
 from musical_microservice.business.music_sequencer import MusicSequencer
 
 class MyTestCase(unittest.TestCase):
-    source_path = '../data/music/index/test_source.json'
-    sources = json.load(open(source_path))
+    music_dir_path = os.path.join(os.getcwd(), '../data/music')
+    sources = json.load(open(os.path.join(music_dir_path, 'source.json')))
 
     def test_it_loads_music(self):
-        sequencer = MusicSequencer('../data/music/index/test_source.json')
+        sequencer = MusicSequencer(self.music_dir_path)
         result =  sequencer.get_all_music()
 
         self.assertEqual(len(self.sources['music']), len(result))

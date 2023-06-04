@@ -1,7 +1,7 @@
 {
   "music" : [
     {
-      "path": "../piano_concerto_no_1_wip.wav",
+      "filename": "piano_concerto_no_1_wip.wav",
       "type": "composition",
       "title" : "Piano Concerto No. 1",
       "parameter_annotations": [

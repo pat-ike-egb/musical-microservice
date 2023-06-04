@@ -4,6 +4,7 @@ class Music:
     General Music file and metadata information
     """
     def __init__(self, wav_path):
+        print('WAVE FILE IS...' + wav_path)
         self.wav = wave.open(fr"{wav_path}", "rb")
         self.wav.tell()
         self.parameter_annotations = {}
