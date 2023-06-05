@@ -13,7 +13,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(len(self.sources['music']), len(result))
         for music in self.sources['music']:
-            self.assertIn(music['path'], result.keys())
+            self.assertIn(music['filename'], result.keys())
 
 
 if __name__ == '__main__':

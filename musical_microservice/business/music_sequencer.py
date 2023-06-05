@@ -24,15 +24,16 @@ class MusicSequencer:
             wav_path = os.path.join(relative_path, music['filename'])
             music_type = music['type']
 
-            if music_type == 'composition':
-                self._music_map[wav_path] = Composition(wav_path, music['title'])
+            if music_type == 'vamp':
+                self._music_map[music['filename']] = Vamp(wav_path)
             else:
-                self._music_map[wav_path] = Music(wav_path)
+                self._music_map[music['filename']] = Music(wav_path)
+
+        self._queue = []
 
     def get_all_music(self):
-        return copy.deepcopy(self._music_map)
+        return copy.copy(self._music_map)
 
     def find_by_key(self, key):
         hits = jmespath.search(f'music[?parameter_annotations.key_signature == {key}]', self._search_index)
-        return [self._music_map[hit['path']] for hit in hits]
-
+        return [self._music_map[hit['filename']] for hit in hits]
