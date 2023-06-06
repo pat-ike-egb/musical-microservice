@@ -1,5 +1,5 @@
 import copy
-import wave
+import collections
 import json
 import jmespath
 import os
@@ -9,7 +9,6 @@ from musical_microservice.models.music import *
 class MusicSequencer:
     """
     This class sequences and returns chunks of audio data
-
     """
     def __init__(self, music_source_dir):
         relative_path = os.path.join(os.getcwd(), music_source_dir)
@@ -25,11 +24,11 @@ class MusicSequencer:
             music_type = music['type']
 
             if music_type == 'vamp':
-                self._music_map[music['filename']] = Vamp(wav_path)
+                self._music_map[music['filename']] = Vamp(wav_path, music['parameter_annotations'])
             else:
-                self._music_map[music['filename']] = Music(wav_path)
+                self._music_map[music['filename']] = Music(wav_path, music['parameter_annotations'])
 
-        self._queue = []
+        self._graph = {}
 
     def get_all_music(self):
         return copy.copy(self._music_map)
@@ -37,3 +36,7 @@ class MusicSequencer:
     def find_by_key(self, key):
         hits = jmespath.search(f'music[?parameter_annotations.key_signature == {key}]', self._search_index)
         return [self._music_map[hit['filename']] for hit in hits]
+
+
+
+

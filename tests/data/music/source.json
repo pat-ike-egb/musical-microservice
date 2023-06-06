@@ -5,10 +5,13 @@
       "type": "vamp",
       "parameter_annotations": [
         {
-          "timestamp": "0.0",
-          "key_signature": "C_MAJOR",
+          "timestamp": 0.0,
+          "tempo": 110,
           "time_signature": "3/4",
-          "tempo": "110"
+          "key": {
+            "tonic" : "C",
+            "mode" : "major"
+          }
         }
       ]
     }

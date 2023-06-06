@@ -1,6 +1,5 @@
 import math
 import os.path
-import time
 import unittest
 import wave
 import pyaudio
@@ -39,7 +38,9 @@ class MyTestCase(unittest.TestCase):
         while data:
             stream.write(data)
             data = wav.readframes(math.floor(samples_per_measure))
-            # time.sleep((1/bps))
+
+
+        # TODO: pitch
 
         #stop stream
         stream.stop_stream()

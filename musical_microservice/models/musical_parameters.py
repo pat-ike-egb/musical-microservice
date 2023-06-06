@@ -1,22 +1,18 @@
-from enum import Enum
 import music21 as m21
 
-class MusicalForm(Enum):
-    WALTZ = 1
-    MINUET = 2
-    SCHERZO = 3
-
-class MusicalParameters:
-    def __init__(self, tempo, time_signature, key_signature):
-        self.tempo : m21.tempo.MetronomeMark = tempo
-        self.time_signature : m21.meter.TimeSignature = time_signature
-        self.key_signature : m21.key.KeySignature = key_signature
+class ParameterAnnotation:
+    def __init__(self, timestamp: float, tempo: int, time_signature: str, key: dict[str, str]):
+        self.timestamp = timestamp
+        self.tempo = m21.tempo.MetronomeMark(tempo)
+        self.time_signature = m21.meter.TimeSignature(time_signature)
+        self.key = m21.key.Key(key["tonic"], key["mode"])
 
     def __eq__(self, other):
-        if isinstance(other, MusicalParameters):
-            return self.tempo == other.tempo and \
+        if isinstance(other, ParameterAnnotation):
+            return self.timestamp == other.timestamp and \
+                self.tempo == other.tempo and \
                 self.time_signature == other.time_signature and \
-                self.key_signature == other.key_signature
+                self.key == other.key
         return NotImplemented
 
     def __hash__(self):
