@@ -1,4 +1,4 @@
-import musical_microservice.models.musical_parameters as musical_parameters
+import musical_microservice.modules.musical_parameters as musical_parameters
 import musical_microservice.services.generated.musical_server_pb2 as pb
 
 def convert_form_pb_to_model(form : pb.MusicalForm) -> musical_parameters.MusicalForm:

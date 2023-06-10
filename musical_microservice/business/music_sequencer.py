@@ -1,16 +1,18 @@
 import copy
-import collections
+from collections import deque
 import json
 import jmespath
 import os
 
-from musical_microservice.models.music import *
+from musical_microservice.modules.music import *
+from musical_microservice.modules.track import Track
+
 
 class MusicSequencer:
     """
     This class sequences and returns chunks of audio data
     """
-    def __init__(self, music_source_dir):
+    def __init__(self, music_source_dir, num_steps=24):
         relative_path = os.path.join(os.getcwd(), music_source_dir)
 
         # load the json search index
@@ -28,7 +30,8 @@ class MusicSequencer:
             else:
                 self._music_map[music['filename']] = Music(wav_path, music['parameter_annotations'])
 
-        self._graph = {}
+        self.tracks = {'vamp': Track(num_steps)}
+
 
     def get_all_music(self):
         return copy.copy(self._music_map)

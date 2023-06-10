@@ -9,6 +9,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_it_loads_music(self):
         sequencer = MusicSequencer(self.music_dir_path)
+
         result =  sequencer.get_all_music()
 
         self.assertEqual(len(self.sources['music']), len(result))
