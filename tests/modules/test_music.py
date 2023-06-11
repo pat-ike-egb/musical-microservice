@@ -4,8 +4,39 @@ import json
 import pyaudio
 
 from musical_microservice.modules.music import (
-    Music
+    Music, Vamp
 )
+
+def audio_test(music: Music, max_duration: float=20.0):
+    p = pyaudio.PyAudio()
+    # open stream
+    stream = p.open(format=p.get_format_from_width(music.get_wav().getsampwidth()),
+                    channels=music.get_wav().getnchannels(),
+                    rate=music.get_wav().getframerate(),
+                    output=True)
+
+    # read data
+    data = music.step()
+    elapsed = 0.0
+
+    while data and (elapsed < max_duration):
+        stream.write(data)
+
+        frames = len(data) / (music.get_wav().getnchannels() * music.get_wav().getsampwidth())
+        elapsed += frames / music.get_wav().getframerate()
+
+        data = music.step()
+        print(elapsed)
+        print(frames)
+        print('---------------------')
+
+    # stop stream
+    stream.stop_stream()
+    stream.close()
+
+    # close PyAudio
+    p.terminate()
+
 
 class MyTestCase(unittest.TestCase):
 
@@ -17,26 +48,17 @@ class MyTestCase(unittest.TestCase):
         path = os.path.join(self.music_dir_path, source['filename'])
 
         music = Music(path, source['parameter_annotations'])
-        wav = music.get_wav()
+        audio_test(music)
+        self.assertTrue(music.complete())
 
-        p = pyaudio.PyAudio()
-        #open stream
-        stream = p.open(format = p.get_format_from_width(wav.getsampwidth()),
-                        channels = wav.getnchannels(),
-                        rate = wav.getframerate(),
-                        output = True)
-        #read data
-        data = music.step()
-        while data:
-            stream.write(data)
-            data = music.step()
+    def test_it_loads_vamp(self):
+        source = self.sources['music'][0]
+        path = os.path.join(self.music_dir_path, source['filename'])
 
-        #stop stream
-        stream.stop_stream()
-        stream.close()
-
-        #close PyAudio
-        p.terminate()
+        music = Vamp(path, source['parameter_annotations'])
+        audio_test(music, 3*music.get_duration())
+        self.assertFalse(music.complete())
+        self.assertEqual(3, music.get_loops())
 
 
 if __name__ == '__main__':
