@@ -36,10 +36,10 @@ class MusicSequencer:
     def get_all_music(self):
         return copy.copy(self._music_map)
 
-    def find_by_key(self, key):
-        hits = jmespath.search(f'music[?parameter_annotations.key_signature == {key}]', self._search_index)
+
+    def find_by_type(self, musicType):
+        hits = jmespath.search(
+            f'music[?(parameter_annotations.type == {musicType})]',
+            self._search_index
+        )
         return [self._music_map[hit['filename']] for hit in hits]
-
-
-
-
