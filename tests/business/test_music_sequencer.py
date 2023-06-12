@@ -2,8 +2,8 @@ import json
 import os
 import unittest
 
-from musical_microservice.business.music_sequencer import MusicSequencer
 from musical_microservice.modules.music import Vamp
+from musical_microservice.modules.music_sequencer import MusicSequencer
 
 
 class MyTestCase(unittest.TestCase):
