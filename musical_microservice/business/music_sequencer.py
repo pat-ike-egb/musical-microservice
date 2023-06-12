@@ -1,5 +1,4 @@
-import copy
-from collections import deque
+import threading
 import json
 import jmespath
 import os
@@ -13,9 +12,12 @@ class MusicSequencer:
     This class sequences and returns chunks of audio data
     """
     def __init__(self, music_source_dir, num_steps=24):
-        relative_path = os.path.join(os.getcwd(), music_source_dir)
+        # thread for sequencing data into tracks
+        self._write_thread: threading.Thread | None = None
+        self._run_sequence = False
 
         # load the json search index
+        relative_path = os.path.join(os.getcwd(), music_source_dir)
         music_source = open(os.path.join(relative_path, 'source.json'))
         self._search_index = json.load(music_source)
 
@@ -36,10 +38,34 @@ class MusicSequencer:
     def get_all_music(self):
         return copy.copy(self._music_map)
 
+    def start(self):
+        self._run_sequence = True
+        self._write_thread = threading.Thread(target=self._sequence)
+        self._write_thread.start()
 
-    def find_by_type(self, musicType):
+    def stop(self):
+        self._run_sequence = False
+        self._write_thread.join()
+
+    def _sequence(self):
+        vamps = self.find_by_type('vamp')
+        vamp = vamps[0]
+
+        track = self.tracks['vamp']
+        data = vamp.step()
+        while data and self._run_sequence:
+            track.queue(data)
+            data = vamp.step()
+
+    def step(self):
+        track = self.tracks['vamp']
+        return track.step()
+
+
+
+    def find_by_type(self, music_type: str):
         hits = jmespath.search(
-            f'music[?(parameter_annotations.type == {musicType})]',
+            f'music[?(parameter_annotations.type == {music_type})]',
             self._search_index
         )
         return [self._music_map[hit['filename']] for hit in hits]

@@ -28,6 +28,16 @@ class MyTestCase(unittest.TestCase):
         for result in results:
             self.assertTrue(isinstance(result, Vamp))
 
+    def test_it_can_sequence(self):
+        self.sequencer.start()
+        try:
+            for i in range(10):
+                data = self.sequencer.step()
+                self.assertIsNotNone(data)
+                self.assertGreater(len(data), 0)
+        finally:
+            self.sequencer.stop()
+
 
 if __name__ == '__main__':
     unittest.main()
