@@ -33,35 +33,55 @@ dependencies:
   - xz=5.4.2=h5eee18b_0
   - zlib=1.2.13=h5eee18b_0
   - pip:
+      - astroid==2.15.5
       - behave==1.2.6
       - certifi==2023.5.7
+      - cfgv==3.3.1
       - chardet==5.1.0
       - charset-normalizer==3.1.0
       - contourpy==1.0.7
+      - coverage==7.2.7
       - cycler==0.11.0
+      - dill==0.3.6
+      - distlib==0.3.6
       - exceptiongroup==1.1.1
+      - filelock==3.12.1
       - fonttools==4.39.4
       - grpcio==1.54.2
+      - identify==2.5.24
       - idna==3.4
       - iniconfig==2.0.0
+      - isort==5.12.0
       - jmespath==1.0.1
       - joblib==1.2.0
       - jsonpickle==3.0.1
       - kiwisolver==1.4.4
+      - lazy-object-proxy==1.9.0
       - matplotlib==3.7.1
+      - mccabe==0.7.0
       - more-itertools==9.1.0
       - music21==8.3.0
+      - nodeenv==1.8.0
       - numpy==1.24.3
       - packaging==23.1
       - parse==1.19.0
       - parse-type==0.6.0
       - pillow==9.5.0
+      - platformdirs==3.5.3
+      - pre-commit==3.3.2
       - protobuf==4.23.2
       - pyaudio==0.2.13
+      - pylint==2.17.4
       - pyparsing==3.0.9
+      - pytest-cov==4.1.0
       - python-dateutil==2.8.2
+      - pyyaml==6.0
       - requests==2.31.0
+      - tomlkit==0.11.8
+      - typing-extensions==4.6.3
       - urllib3==2.0.2
+      - virtualenv==20.23.0
       - wave==0.0.2
       - webcolors==1.13
+      - wrapt==1.15.0
 prefix: /home/pegbuchulam/miniconda3/envs/py3.10

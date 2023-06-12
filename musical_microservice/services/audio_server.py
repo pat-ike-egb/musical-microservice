@@ -11,7 +11,7 @@ class AudioService(generated.audio_server_pb2_grpc.AudioServerServicer):
         super().__init__()
 
     def connect(self, request: ConnectRequest, context):
-        music_dir_path = os.path.join(os.getcwd(), "../data/music")
+        music_dir_path = os.path.join(os.getcwd(), "../resources/music")
 
         # create a new music sequencer for this connection:
         sequencer = MusicSequencer(music_dir_path)

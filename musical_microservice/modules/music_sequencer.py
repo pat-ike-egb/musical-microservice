@@ -11,16 +11,16 @@ from musical_microservice.modules.track import Track
 
 class MusicSequencer:
     """
-    This class sequences and returns chunks of audio data
+    This class sequences and returns chunks of audio resources
     """
 
     def __init__(self, music_source_dir, num_steps=24):
-        # thread for sequencing data into tracks
+        # thread for sequencing resources into tracks
         self._write_thread: threading.Thread | None = None
         self._run_sequence = False
 
         # load the json search index
-        relative_path = os.path.join(os.getcwd(), music_source_dir)
+        relative_path = os.path.relpath(music_source_dir)
         music_source = open(os.path.join(relative_path, "source.json"))
         self._search_index = json.load(music_source)
 

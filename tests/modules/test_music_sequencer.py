@@ -7,7 +7,7 @@ from musical_microservice.modules.music_sequencer import MusicSequencer
 
 
 class MyTestCase(unittest.TestCase):
-    music_dir_path = os.path.join(os.getcwd(), "../data/music")
+    music_dir_path = os.path.join("..", "resources", "music")
     sources = json.load(open(os.path.join(music_dir_path, "source.json")))
 
     sequencer = MusicSequencer(music_dir_path)

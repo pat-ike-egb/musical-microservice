@@ -17,7 +17,7 @@ def audio_test(music: Music, max_duration: float = 20.0):
         output=True,
     )
 
-    # read data
+    # read resources
     data = music.step()
     elapsed = 0.0
 
@@ -43,7 +43,7 @@ def audio_test(music: Music, max_duration: float = 20.0):
 
 
 class MyTestCase(unittest.TestCase):
-    music_dir_path = os.path.join(os.getcwd(), "../data/music")
+    music_dir_path = os.path.join("..", "resources", "music")
     sources = json.load(open(os.path.join(music_dir_path, "source.json")))
 
     def test_it_loads_music(self):
