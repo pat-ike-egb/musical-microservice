@@ -1,14 +1,20 @@
 import copy
 import math
 import wave
-from musical_microservice.modules.musical_parameters import *
+
+from musical_microservice.modules.musical_parameters import ParameterAnnotation
+
+
 class Music:
     """
     General Music file and metadata information
     """
+
     def __init__(self, wav_path, parameter_annotations):
-        self.wav = wave.open(fr"{wav_path}", "rb")
-        self.parameter_annotations = [ParameterAnnotation(**annotation) for annotation in parameter_annotations]
+        self.wav = wave.open(rf"{wav_path}", "rb")
+        self.parameter_annotations = [
+            ParameterAnnotation(**annotation) for annotation in parameter_annotations
+        ]
         self.byte_sequences_by_measure: list[bytes] = []
 
         self.current_measure = 0
@@ -23,15 +29,19 @@ class Music:
             beats_per_measure = annotation.time_signature.beatCount
             samples_per_measure = math.ceil(samples_per_beat * beats_per_measure)
 
-            end_of_annotation = (self.parameter_annotations[i+1].timestamp * self.wav.getframerate()) if (i+1 < num_markers) \
+            end_of_annotation = (
+                (self.parameter_annotations[i + 1].timestamp * self.wav.getframerate())
+                if (i + 1 < num_markers)
                 else self.wav.getnframes()
+            )
 
             # TODO: add by measure? or add by beat?
             while processed_samples < end_of_annotation:
                 measure_bytes = self.wav.readframes(samples_per_measure)
                 self.byte_sequences_by_measure.append(measure_bytes)
-                processed_samples = min((processed_samples + samples_per_measure), self.wav.getnframes())
-
+                processed_samples = min(
+                    (processed_samples + samples_per_measure), self.wav.getnframes()
+                )
 
     def gets_all_data(self) -> list[bytes]:
         return copy.deepcopy(self.byte_sequences_by_measure)
@@ -61,8 +71,9 @@ class Vamp(Music):
     Music file meant to be seamlessly and endlessly looped
     overrides the step and is complete function
     """
+
     def __init__(self, wav_path, parameter_annotations):
-        super(Vamp, self).__init__(wav_path, parameter_annotations)
+        super().__init__(wav_path, parameter_annotations)
         self.loops = 0
 
     def step(self) -> bytes | None:
@@ -81,17 +92,21 @@ class Vamp(Music):
     def complete(self):
         return False
 
+
 class Ornament(Music):
     """
     short, supplemental music file, triggered to play on top of a longer piece of audio
     """
+
     def __init__(self, wav_path, parameter_annotations):
-        super(Ornament, self).__init__(wav_path, parameter_annotations)
+        super().__init__(wav_path, parameter_annotations)
+
 
 class Composition(Music):
     """
     lengthy, non-repeatable body of work
     """
+
     def __init__(self, wav_path, title, parameter_annotations):
-        super(Composition, self).__init__(wav_path, parameter_annotations)
+        super().__init__(wav_path, parameter_annotations)
         self.title = title

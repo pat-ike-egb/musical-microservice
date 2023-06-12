@@ -1,5 +1,6 @@
 import queue
 
+
 class Track:
     def __init__(self, num_steps: int):
         self._queue: queue.Queue[bytes] = queue.Queue(maxsize=num_steps)

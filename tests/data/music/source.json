@@ -1,5 +1,5 @@
 {
-  "music" : [
+  "music": [
     {
       "filename": "test_vamp_1_c_major_16bit.wav",
       "type": "vamp",
@@ -9,8 +9,8 @@
           "tempo": 110,
           "time_signature": "3/4",
           "key": {
-            "tonic" : "C",
-            "mode" : "major"
+            "tonic": "C",
+            "mode": "major"
           }
         }
       ]

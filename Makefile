@@ -19,12 +19,11 @@ generate-proto: clean-generated
         $$INPUT/*.proto; \
 	sed -i -E 's/^import.*_pb2/from . \0/' $$OUTPUT/*.py
 
-#build-dev:
-#
-#build-prod:
-
 clean-generated:
 	rm -rf ./generated ./**/*/generated
 
 clean: clean-generated
 	rm -rf .pytest_cache .coverage .pytest_cache coverage.xml
+
+pc:
+	pre-commit run --all-files
