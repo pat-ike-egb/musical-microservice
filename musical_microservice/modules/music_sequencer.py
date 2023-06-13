@@ -4,9 +4,8 @@ import os
 import threading
 
 import jmespath
-
-from musical_microservice.modules.music import Music, Vamp
-from musical_microservice.modules.track import Track
+from modules.music import Music, Vamp
+from modules.track import Track
 
 
 class MusicSequencer:

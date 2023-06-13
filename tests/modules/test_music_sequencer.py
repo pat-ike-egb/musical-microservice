@@ -2,12 +2,14 @@ import json
 import os
 import unittest
 
-from musical_microservice.modules.music import Vamp
-from musical_microservice.modules.music_sequencer import MusicSequencer
+from modules.music import Vamp
+from modules.music_sequencer import MusicSequencer
 
 
 class MyTestCase(unittest.TestCase):
-    music_dir_path = os.path.join(os.path.dirname(__file__), "..", "resources", "music")
+    music_dir_path = os.path.join(
+        os.path.dirname(__file__), "..", "..", "resources", "music"
+    )
     sources = json.load(open(os.path.join(music_dir_path, "source.json")))
 
     sequencer = MusicSequencer(music_dir_path)

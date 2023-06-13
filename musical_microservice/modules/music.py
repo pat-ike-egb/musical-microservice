@@ -2,7 +2,7 @@ import copy
 import math
 import wave
 
-from musical_microservice.modules.musical_parameters import ParameterAnnotation
+from modules.musical_parameters import ParameterAnnotation
 
 
 class Music:

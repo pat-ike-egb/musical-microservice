@@ -3,8 +3,7 @@ import os.path
 import unittest
 
 import pyaudio
-
-from musical_microservice.modules.music import Music, Vamp
+from modules.music import Music, Vamp
 
 
 def audio_test(music: Music, max_duration: float = 20.0):
@@ -38,7 +37,9 @@ def audio_test(music: Music, max_duration: float = 20.0):
 
 
 class MyTestCase(unittest.TestCase):
-    music_dir_path = os.path.join(os.path.dirname(__file__), "..", "resources", "music")
+    music_dir_path = os.path.join(
+        os.path.dirname(__file__), "..", "..", "resources", "music"
+    )
     sources = json.load(open(os.path.join(music_dir_path, "source.json")))
 
     def test_it_loads_music(self):

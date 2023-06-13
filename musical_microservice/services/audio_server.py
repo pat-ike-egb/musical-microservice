@@ -1,12 +1,11 @@
 import os
 
-import generated.audio_server_pb2_grpc
-from generated.audio_server_pb2 import AudioData, ConnectRequest
+from modules.music_sequencer import MusicSequencer
+from services.generated.audio_server_pb2 import AudioData, ConnectRequest
+from services.generated.audio_server_pb2_grpc import AudioServerServicer
 
-from musical_microservice.modules.music_sequencer import MusicSequencer
 
-
-class AudioService(generated.audio_server_pb2_grpc.AudioServerServicer):
+class AudioService(AudioServerServicer):
     def __init__(self):
         super().__init__()
 
