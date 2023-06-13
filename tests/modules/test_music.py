@@ -23,16 +23,11 @@ def audio_test(music: Music, max_duration: float = 20.0):
 
     while data and (elapsed < max_duration):
         stream.write(data)
-
         frames = len(data) / (
             music.get_wav().getnchannels() * music.get_wav().getsampwidth()
         )
         elapsed += frames / music.get_wav().getframerate()
-
         data = music.step()
-        print(elapsed)
-        print(frames)
-        print("---------------------")
 
     # stop stream
     stream.stop_stream()
@@ -43,7 +38,7 @@ def audio_test(music: Music, max_duration: float = 20.0):
 
 
 class MyTestCase(unittest.TestCase):
-    music_dir_path = os.path.join("..", "resources", "music")
+    music_dir_path = os.path.join(os.path.dirname(__file__), "..", "resources", "music")
     sources = json.load(open(os.path.join(music_dir_path, "source.json")))
 
     def test_it_loads_music(self):
