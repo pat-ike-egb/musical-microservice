@@ -10,11 +10,20 @@ class AudioService(AudioServerServicer):
         super().__init__()
 
     def connect(self, request: ConnectRequest, context):
-        music_dir_path = os.path.join(os.getcwd(), "../resources/music")
+        print("incoming connection")
+        music_dir_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "resources", "music"
+        )
 
         # create a new music sequencer for this connection:
         sequencer = MusicSequencer(music_dir_path)
+        sequencer.start()
 
         # audio should be buffered, perhaps it's the clients job to buffer the audio
-        while True:
-            yield AudioData(data=sequencer.step())
+        try:
+            while True:
+                data = sequencer.step()
+                print(f"streaming {len(data)} bytes")
+                yield AudioData(data=data)
+        finally:
+            sequencer.stop()

@@ -28,5 +28,8 @@ clean: clean-generated
 pc:
 	pre-commit run --all-files
 
-start:
+server-start:
 	python musical_microservice/server.py
+
+client-start:
+	python musical_microservice/client.py
