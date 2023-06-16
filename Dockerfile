@@ -3,7 +3,7 @@ FROM python:3.10
 RUN mkdir /app
 
 COPY musical_microservice/ /app/
-COPY requirements_locked.txt.txt /app/requirements.txt
+COPY requirements_locked.txt /app/requirements.txt
 
 WORKDIR /app
 
