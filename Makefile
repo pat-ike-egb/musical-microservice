@@ -33,3 +33,9 @@ server-start:
 
 client-start:
 	python musical_microservice/client.py
+
+docker-build:
+	docker build . -t musical-microservice
+
+docker-run:
+	docker run -p 50001:50001 musical-microservice:latest
