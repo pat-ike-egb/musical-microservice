@@ -1,0 +1,19 @@
+[project]
+name = "musical_microservice"
+version = "0.0.1"
+description = "Computational Music Service Processing and Streaming Service"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  {name = "Pat I Egbuchulam", email = "pat@egb.dev" }
+]
+maintainers = [
+   {name = "Pat I Egbuchulam", email = "pat@egb.dev" }
+]
+
+[project.urls]
+"Source" = "https://github.com/pat-ike-egb/musical-microservice"
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
