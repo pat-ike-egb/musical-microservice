@@ -35,7 +35,7 @@ client-start:
 	python musical_microservice/client.py
 
 docker-build:
-	docker build . -t musical-microservice
+	docker build . -t pat-ike-egb/musical-microservice
 
 docker-run:
-	docker run -p 50001:50001 musical-microservice:latest
+	docker run -p 50051:50051 pat-ike-egb/musical-microservice:latest
