@@ -4,8 +4,8 @@ import os
 import threading
 
 import jmespath
-from modules.music import Music, Vamp
-from modules.track import Track
+from music import Music, Vamp
+from track import Track
 
 
 class MusicSequencer:

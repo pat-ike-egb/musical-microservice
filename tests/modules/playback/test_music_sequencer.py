@@ -2,8 +2,8 @@ import json
 import os
 import unittest
 
-from modules.music import Vamp
-from modules.music_sequencer import MusicSequencer
+from modules.playback.music import Vamp
+from modules.playback.music_sequencer import MusicSequencer
 
 
 class MyTestCase(unittest.TestCase):

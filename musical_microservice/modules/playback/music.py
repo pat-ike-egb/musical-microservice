@@ -2,7 +2,7 @@ import copy
 import math
 import wave
 
-from modules.musical_parameters import ParameterAnnotation
+from playback.musical_parameters import ParameterAnnotation
 
 
 class Music:

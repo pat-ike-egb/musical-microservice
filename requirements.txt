@@ -1,5 +1,0 @@
-grpcio==1.56.2
-grpcio-tools==1.56.2
-jmespath~=1.0.1
-music21==9.1.0
-Wave~=0.0.2

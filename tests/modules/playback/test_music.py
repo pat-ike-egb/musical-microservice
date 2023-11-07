@@ -3,7 +3,7 @@ import os.path
 import unittest
 
 import pyaudio
-from modules.music import Music, Vamp
+from modules.playback.music import Music, Vamp
 
 
 def audio_test(music: Music, max_duration: float = 20.0):

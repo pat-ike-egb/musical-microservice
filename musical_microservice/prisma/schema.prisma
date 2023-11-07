@@ -1,0 +1,144 @@
+// database
+datasource db {
+  provider = "postgresql"
+  url      = "file:database.db"
+}
+
+// generator
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+model Pitch {
+  midiIndex Int
+
+  base       String
+  alteration Int    @default(0)
+
+  startRanges PitchRange[] @relation(name: "low")
+  endRanges   PitchRange[] @relation(name: "high")
+
+  nameWithOctave String @id
+}
+
+model PitchRange {
+  lowPitch    Pitch  @relation(name: "low", fields: [lowPitch_id], references: [nameWithOctave])
+  lowPitch_id String
+
+  highPitch    Pitch  @relation(name: "high", fields: [highPitch_id], references: [nameWithOctave])
+  highPitch_id String
+
+  registersDefinedBy   Register[]
+  instrumentsDefinedBy Instrument[]
+  techniquesDefinedBy  Technique[]
+
+  @@unique([lowPitch_id, highPitch_id])
+}
+
+model Instrument {
+  id   String @id @default(uuid())
+  name String
+
+  playableRange PitchRange  @relation(fields: [playableRangeLowPitch_id, playableRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+  registers     Register[]
+  techniques    Technique[]
+
+  toneDescriptions       ToneQualityReference[]
+  playableRangeLowPitch_id  String
+  playableRangeHighPitch_id String
+}
+
+model Register {
+  id   String @id @default(uuid())
+  name String
+
+  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+  instrumentId String
+
+  pitchRange             PitchRange @relation(fields: [pitchRangeLowPitch_id, pitchRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+  pitchRangeLowPitch_id  String
+  pitchRangeHighPitch_id String
+
+  toneDescriptions ToneQualityReference[]
+}
+
+model Technique {
+  id   String @id @default(uuid())
+  name String
+
+  instrument    Instrument  @relation(fields: [instrumentId], references: [id])
+  playableRange PitchRange? @relation(fields: [pitchRangeLowPitch_id, pitchRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+
+  toneDescriptions ToneQualityReference[]
+
+  instrumentId           String
+  pitchRangeLowPitch_id  String?
+  pitchRangeHighPitch_id String?
+}
+
+enum Dynamics {
+  ppp
+  pp
+  p
+  mp
+  mf
+  f
+  ff
+  fff
+}
+
+model ToneQuality {
+  id              String                 @id @default(uuid())
+  descriptiveText String                 @unique
+  references      ToneQualityReference[]
+}
+
+model ToneQualityReference {
+  id                      String      @id @default(uuid())
+  toneQuality             ToneQuality @relation(fields: [toneQuality_description], references: [descriptiveText])
+  toneQuality_description String
+
+  instrument    Instrument? @relation(fields: [instrument_id], references: [id])
+  instrument_id String?
+
+  register    Register? @relation(fields: [register_id], references: [id])
+  register_id String?
+
+  technique    Technique? @relation(fields: [technique_id], references: [id])
+  technique_id String?
+
+  dynamic Dynamics?
+
+  referencePassage    ReferencePassage? @relation(fields: [referencePassage_id], references: [id])
+  referencePassage_id String?
+}
+
+model ReferencePassage {
+  id String @id @default(uuid())
+
+  toneQualityReferences ToneQualityReference[]
+  opus                  Opus                   @relation(fields: [opus_id], references: [id])
+  opus_id               String
+
+  movement Int
+  measure  Int
+}
+
+model Opus {
+  id   String @id @default(uuid())
+  name String
+
+  composer    Composer @relation(fields: [composer_id], references: [id])
+  composer_id String
+
+  referencePassages ReferencePassage[]
+}
+
+model Composer {
+  id   String @id @default(uuid())
+  name String
+
+  opuses Opus[]
+}
