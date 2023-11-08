@@ -1,5 +1,6 @@
 import music21 as m21
-from instrument import Instrument, PitchRange, Roll
+
+from .instrument import Instrument, PitchRange, Roll
 
 
 class String(Instrument):
