@@ -1,7 +1,7 @@
 // database
 datasource db {
   provider = "postgresql"
-  url      = "file:database.db"
+  url      = env("DATABASE_URL")
 }
 
 // generator
@@ -141,4 +141,14 @@ model Composer {
   name String
 
   opuses Opus[]
+}
+
+model Score {
+  id   String @id @default(uuid())
+  name String
+}
+
+model Recording {
+  id   String @id @default(uuid())
+  name String
 }
