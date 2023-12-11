@@ -30,9 +30,9 @@ model PitchRange {
   highPitch    Pitch  @relation(name: "high", fields: [highPitch_id], references: [nameWithOctave])
   highPitch_id String
 
-  registersDefinedBy   Register[]
-  instrumentsDefinedBy Instrument[]
-  techniquesDefinedBy  Technique[]
+  pitchRegistersDefinedBy    PitchRegister[]
+  instrumentsDefinedBy       Instrument[]
+  playingTechniquesDefinedBy PlayingTechnique[]
 
   @@unique([lowPitch_id, highPitch_id])
 }
@@ -41,16 +41,16 @@ model Instrument {
   id   String @id @default(uuid())
   name String
 
-  playableRange PitchRange  @relation(fields: [playableRangeLowPitch_id, playableRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
-  registers     Register[]
-  techniques    Technique[]
+  playableRange     PitchRange         @relation(fields: [playableRangeLowPitch_id, playableRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+  pitchRegisters    PitchRegister[]
+  playingTechniques PlayingTechnique[]
 
-  toneDescriptions       ToneQualityReference[]
+  toneDescriptions          ToneQualityReference[]
   playableRangeLowPitch_id  String
   playableRangeHighPitch_id String
 }
 
-model Register {
+model PitchRegister {
   id   String @id @default(uuid())
   name String
 
@@ -64,7 +64,7 @@ model Register {
   toneDescriptions ToneQualityReference[]
 }
 
-model Technique {
+model PlayingTechnique {
   id   String @id @default(uuid())
   name String
 
@@ -103,11 +103,11 @@ model ToneQualityReference {
   instrument    Instrument? @relation(fields: [instrument_id], references: [id])
   instrument_id String?
 
-  register    Register? @relation(fields: [register_id], references: [id])
-  register_id String?
+  pitchRegister    PitchRegister? @relation(fields: [pitchRegister_id], references: [id])
+  pitchRegister_id String?
 
-  technique    Technique? @relation(fields: [technique_id], references: [id])
-  technique_id String?
+  playingTechnique    PlayingTechnique? @relation(fields: [playingTechnique_id], references: [id])
+  playingTechnique_id String?
 
   dynamic Dynamics?
 
