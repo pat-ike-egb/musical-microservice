@@ -41,13 +41,13 @@ model Instrument {
   id   String @id @default(uuid())
   name String
 
-  playableRange     PitchRange         @relation(fields: [playableRangeLowPitch_id, playableRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+  soundingRange     PitchRange         @relation(fields: [soundingRangeLowPitch_id, soundingRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
   pitchRegisters    PitchRegister[]
   playingTechniques PlayingTechnique[]
 
   toneDescriptions          ToneQualityReference[]
-  playableRangeLowPitch_id  String
-  playableRangeHighPitch_id String
+  soundingRangeLowPitch_id  String
+  soundingRangeHighPitch_id String
 }
 
 model PitchRegister {
@@ -69,7 +69,7 @@ model PlayingTechnique {
   name String
 
   instrument    Instrument  @relation(fields: [instrumentId], references: [id])
-  playableRange PitchRange? @relation(fields: [pitchRangeLowPitch_id, pitchRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
+  soundingRange PitchRange? @relation(fields: [pitchRangeLowPitch_id, pitchRangeHighPitch_id], references: [lowPitch_id, highPitch_id])
 
   toneDescriptions ToneQualityReference[]
 
@@ -133,6 +133,9 @@ model Opus {
   composer    Composer @relation(fields: [composer_id], references: [id])
   composer_id String
 
+  score      Score?
+  recordings Recording[]
+
   referencePassages ReferencePassage[]
 }
 
@@ -146,9 +149,15 @@ model Composer {
 model Score {
   id   String @id @default(uuid())
   name String
+
+  opus    Opus   @relation(fields: [opus_id], references: [id])
+  opus_id String @unique
 }
 
 model Recording {
   id   String @id @default(uuid())
   name String
+
+  opus    Opus   @relation(fields: [opus_id], references: [id])
+  opus_id String @unique
 }
