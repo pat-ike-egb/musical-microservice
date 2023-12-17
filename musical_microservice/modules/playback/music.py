@@ -1,8 +1,8 @@
 import copy
 import math
-import wave
+import os
 
-from .musical_parameters import ParameterAnnotation
+from modules.util.storage import fetch_audio_recording, get_object_storage_client
 
 
 class Music:
@@ -10,18 +10,16 @@ class Music:
     General Music file and metadata information
     """
 
-    def __init__(self, wav_path, parameter_annotations):
-        self.wav = wave.open(rf"{wav_path}", "rb")
-        self.parameter_annotations = [
-            ParameterAnnotation(**annotation) for annotation in parameter_annotations
-        ]
-        self.byte_sequences_by_measure: list[bytes] = []
+    def __init__(self, recording_key: str, metadata=None):
+        client = get_object_storage_client()
+        bucket = os.environ.get("STORAGE_BUCKET")
+        self.audio_file = fetch_audio_recording(client, bucket, recording_key)
+
+        num_markers = 0
 
         self.current_measure = 0
 
         processed_samples = 0
-        num_markers = len(self.parameter_annotations)
-        print(num_markers)
         for i, annotation in enumerate(self.parameter_annotations):
             bps = annotation.tempo.number / 60
             samples_per_beat = self.wav.getframerate() / bps
@@ -72,8 +70,8 @@ class Vamp(Music):
     overrides the step and is complete function
     """
 
-    def __init__(self, wav_path, parameter_annotations):
-        super().__init__(wav_path, parameter_annotations)
+    def __init__(self, recording_key):
+        super().__init__(recording_key)
         self.loops = 0
 
     def step(self) -> bytes | None:
@@ -98,15 +96,17 @@ class Ornament(Music):
     short, supplemental music file, triggered to play on top of a longer piece of audio
     """
 
-    def __init__(self, wav_path, parameter_annotations):
-        super().__init__(wav_path, parameter_annotations)
+    def __init__(self, recording_key):
+        super().__init__(recording_key)
 
 
+# TODO,
 class Composition(Music):
     """
-    lengthy, non-repeatable body of work
+    An audio recording with an associated music XML score
     """
 
-    def __init__(self, wav_path, title, parameter_annotations):
-        super().__init__(wav_path, parameter_annotations)
-        self.title = title
+    def __init__(self, recording_key, score_key):
+        super().__init__(recording_key)
+
+        # TODO: fetch score, render musicXML
