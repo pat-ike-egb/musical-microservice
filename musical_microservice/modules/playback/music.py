@@ -2,7 +2,9 @@ import copy
 import math
 import os
 
+# import music21 as m21
 from modules.util.storage import fetch_audio_recording, get_object_storage_client
+from pedalboard.io import AudioFile
 
 
 class Music:
@@ -108,5 +110,11 @@ class Composition(Music):
 
     def __init__(self, recording_key, score_key):
         super().__init__(recording_key)
+
+        self.audio: AudioFile = fetch_audio_recording(
+            get_object_storage_client(), os.environ.get("SPACES_BUCKET", recording_key)
+        )
+        # TODO: self.score: m21.Score = fn to
+        # parse musicxml using m21 score and parts object
 
         # TODO: fetch score, render musicXML
