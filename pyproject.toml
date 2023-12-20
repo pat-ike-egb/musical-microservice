@@ -19,6 +19,7 @@ pedalboard = "^0.8.7"
 pytest = "^7.4.3"
 pre-commit = "^3.5.0"
 pytest-cov = "^4.1.0"
+moto = {extras = ["s3"], version = "^4.2.12"}
 
 [build-system]
 requires = ["poetry-core"]
