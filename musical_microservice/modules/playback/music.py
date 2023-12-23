@@ -2,9 +2,27 @@ import copy
 import math
 import os
 
+import music21 as m21
+
 # import music21 as m21
-from modules.util.storage import fetch_audio_recording, get_object_storage_client
+from modules.util.storage import fetch_recording, fetch_score, get_object_storage_client
 from pedalboard.io import AudioFile
+
+
+class Composition:
+    """
+    An audio recording with an associated music XML score
+    """
+
+    def __init__(self, recording_key, score_key):
+        super().__init__()
+        storage_client = get_object_storage_client()
+        self.recording: AudioFile = fetch_recording(
+            storage_client, os.environ.get("SPACES_BUCKET"), recording_key
+        )
+        self.score: m21.stream.Score = fetch_score(
+            storage_client, os.environ.get("SPACES_BUCKET"), score_key
+        )
 
 
 class Music:
@@ -12,10 +30,10 @@ class Music:
     General Music file and metadata information
     """
 
-    def __init__(self, recording_key: str, metadata=None):
+    def __init__(self, recording_key: str):
         client = get_object_storage_client()
-        bucket = os.environ.get("STORAGE_BUCKET")
-        self.audio_file = fetch_audio_recording(client, bucket, recording_key)
+        bucket = os.environ.get("SPACES_BUCKET")
+        self.audio_file = fetch_recording(client, bucket, recording_key)
 
         num_markers = 0
 
@@ -100,21 +118,3 @@ class Ornament(Music):
 
     def __init__(self, recording_key):
         super().__init__(recording_key)
-
-
-# TODO,
-class Composition(Music):
-    """
-    An audio recording with an associated music XML score
-    """
-
-    def __init__(self, recording_key, score_key):
-        super().__init__(recording_key)
-
-        self.audio: AudioFile = fetch_audio_recording(
-            get_object_storage_client(), os.environ.get("SPACES_BUCKET", recording_key)
-        )
-        # TODO: self.score: m21.Score = fn to
-        # parse musicxml using m21 score and parts object
-
-        # TODO: fetch score, render musicXML
