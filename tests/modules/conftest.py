@@ -6,20 +6,27 @@ from modules.util.storage import get_object_storage_client
 from moto import mock_s3
 
 music_dir_path = os.path.join(os.path.dirname(__file__), "data")
+env_file_path = os.path.join(os.path.dirname(__file__), ".env.test")
 
 
 def pytest_generate_tests(metafunc):
-    load_dotenv()
+    load_dotenv(env_file_path)
+
+
+@pytest.fixture(autouse=True)
+def moto_boto():
+    # setup: start moto server and create the bucket
+    mock = mock_s3()
+    mock.start()
+    client = get_object_storage_client()
+    client.create_bucket(Bucket=os.environ.get("S3_BUCKET"))
+    yield
+    # teardown: stop moto server
+    mock.stop()
 
 
 @pytest.fixture
-def object_bucket():
-    return os.environ.get("SPACES_BUCKET")
-
-
-@mock_s3
-@pytest.fixture
-def test_recording(object_bucket):
+def test_recording():
     key = os.path.join(
         "musical-microservice", "opuses", "test", "recordings", "test.wav"
     )
@@ -27,16 +34,15 @@ def test_recording(object_bucket):
     client = get_object_storage_client()
     client.upload_file(
         os.path.join(music_dir_path, "recordings", "test.wav"),
-        object_bucket,
+        os.environ.get("S3_BUCKET"),
         key,
     )
     client.close()
     return key
 
 
-@mock_s3
 @pytest.fixture
-def test_score(object_bucket):
+def test_score():
     key = os.path.join(
         "musical-microservice", "opuses", "test_composition", "score", "test.mxl"
     )
@@ -44,7 +50,7 @@ def test_score(object_bucket):
     client = get_object_storage_client()
     client.upload_file(
         os.path.join(music_dir_path, "scores", "test.mxl"),
-        object_bucket,
+        os.environ.get("S3_BUCKET"),
         key,
     )
     client.close()

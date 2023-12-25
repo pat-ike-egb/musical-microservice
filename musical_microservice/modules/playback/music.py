@@ -18,11 +18,35 @@ class Composition:
         super().__init__()
         storage_client = get_object_storage_client()
         self.recording: AudioFile = fetch_recording(
-            storage_client, os.environ.get("SPACES_BUCKET"), recording_key
+            storage_client, os.environ.get("S3_BUCKET"), recording_key
         )
         self.score: m21.stream.Score = fetch_score(
-            storage_client, os.environ.get("SPACES_BUCKET"), score_key
+            storage_client, os.environ.get("S3_BUCKET"), score_key
         )
+
+        expander = m21.repeat.Expander(self.score.parts[0])
+        self.playback_measures = expander.process().secondsMap
+
+        self.current_measure = 0
+        self.byte_sequences_by_measure = []
+        for measure in self.playback_measures:
+            data = int(self.recording.samplerate * measure["durationSeconds"])
+            self.byte_sequences_by_measure.append(self.recording.read(data))
+
+        self.recording.close()
+
+    def step(self) -> bytes | None:
+        if not self.complete():
+            measure = self.byte_sequences_by_measure[self.current_measure]
+            self.current_measure += 1
+            return measure
+        return None
+
+    def complete(self):
+        return self.current_measure == len(self.byte_sequences_by_measure)
+
+    def reset(self):
+        self.current_measure = 0
 
 
 class Music:
@@ -32,7 +56,7 @@ class Music:
 
     def __init__(self, recording_key: str):
         client = get_object_storage_client()
-        bucket = os.environ.get("SPACES_BUCKET")
+        bucket = os.environ.get("S3_BUCKET")
         self.audio_file = fetch_recording(client, bucket, recording_key)
 
         num_markers = 0
