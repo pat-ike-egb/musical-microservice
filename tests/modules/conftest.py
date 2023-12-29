@@ -55,3 +55,17 @@ def test_score():
     )
     client.close()
     return key
+
+
+@pytest.fixture
+def test_opus_config():
+    key = os.path.join("musical-microservice", "opuses", "config.json")
+
+    client = get_object_storage_client()
+    client.upload_file(
+        os.path.join(music_dir_path, "config.json"),
+        os.environ.get("S3_BUCKET"),
+        key,
+    )
+    client.close()
+    return key

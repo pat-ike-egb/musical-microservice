@@ -5,8 +5,10 @@ import threading
 
 import jmespath
 
-from .music import Music, Vamp
+from .music import Vamp
 from .track import Track
+
+# from modules.util.storage import get_object_storage_client
 
 
 class MusicSequencer:
@@ -19,6 +21,9 @@ class MusicSequencer:
         self._write_thread: threading.Thread | None = None
         self._run_sequence = False
 
+        # client = get_object_storage_client()
+        # config_key = os.path.join()
+
         # load the json search index
         relative_path = os.path.relpath(music_source_dir)
         music_source = open(os.path.join(relative_path, "source.json"))
@@ -28,16 +33,11 @@ class MusicSequencer:
         self._music_map = {}
         for music in self._search_index["music"]:
             wav_path = os.path.join(relative_path, music["filename"])
-            music_type = music["type"]
+            # music_type = music["type"]
 
-            if music_type == "vamp":
-                self._music_map[music["filename"]] = Vamp(
-                    wav_path, music["parameter_annotations"]
-                )
-            else:
-                self._music_map[music["filename"]] = Music(
-                    wav_path, music["parameter_annotations"]
-                )
+            self._music_map[music["filename"]] = Vamp(
+                wav_path, music["parameter_annotations"]
+            )
 
         self.tracks = {"vamp": Track(num_steps)}
 

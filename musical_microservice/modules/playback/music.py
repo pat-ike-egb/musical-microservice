@@ -1,5 +1,3 @@
-import copy
-import math
 import os
 
 import music21 as m21
@@ -17,17 +15,21 @@ class Composition:
     def __init__(self, recording_key, score_key):
         super().__init__()
         storage_client = get_object_storage_client()
+
+        # fetch the audio recording from the s3 bucket
         self.recording: AudioFile = fetch_recording(
             storage_client, os.environ.get("S3_BUCKET"), recording_key
         )
+
+        # fetch the score from the s3 bucket
         self.score: m21.stream.Score = fetch_score(
             storage_client, os.environ.get("S3_BUCKET"), score_key
         )
 
+        # for playback purposes, expand any repeated measures
         expander = m21.repeat.Expander(self.score.parts[0])
         self.playback_measures = expander.process().secondsMap
 
-        self.current_measure = 0
         self.byte_sequences_by_measure = []
         for measure in self.playback_measures:
             data = int(self.recording.samplerate * measure["durationSeconds"])
@@ -35,6 +37,9 @@ class Composition:
 
         self.recording.close()
 
+        # keep track of the current measure during playback
+        self.current_measure = 0
+
     def step(self) -> bytes | None:
         if not self.complete():
             measure = self.byte_sequences_by_measure[self.current_measure]
@@ -49,73 +54,17 @@ class Composition:
         self.current_measure = 0
 
 
-class Music:
+class Vamp(Composition):
     """
-    General Music file and metadata information
-    """
+    Music file meant to be endlessly looped.
 
-    def __init__(self, recording_key: str):
-        client = get_object_storage_client()
-        bucket = os.environ.get("S3_BUCKET")
-        self.audio_file = fetch_recording(client, bucket, recording_key)
+    Rather than considering a vamp 'complete' we keep
+    track of the number of loops through all of its measures
 
-        num_markers = 0
-
-        self.current_measure = 0
-
-        processed_samples = 0
-        for i, annotation in enumerate(self.parameter_annotations):
-            bps = annotation.tempo.number / 60
-            samples_per_beat = self.wav.getframerate() / bps
-
-            beats_per_measure = annotation.time_signature.beatCount
-            samples_per_measure = math.ceil(samples_per_beat * beats_per_measure)
-
-            end_of_annotation = (
-                (self.parameter_annotations[i + 1].timestamp * self.wav.getframerate())
-                if (i + 1 < num_markers)
-                else self.wav.getnframes()
-            )
-
-            # TODO: add by measure? or add by beat?
-            while processed_samples < end_of_annotation:
-                measure_bytes = self.wav.readframes(samples_per_measure)
-                self.byte_sequences_by_measure.append(measure_bytes)
-                processed_samples = min(
-                    (processed_samples + samples_per_measure), self.wav.getnframes()
-                )
-
-    def gets_all_data(self) -> list[bytes]:
-        return copy.deepcopy(self.byte_sequences_by_measure)
-
-    def get_duration(self) -> float:
-        return self.wav.getnframes() / self.wav.getframerate()
-
-    def step(self) -> bytes | None:
-        if not self.complete():
-            measure = self.byte_sequences_by_measure[self.current_measure]
-            self.current_measure += 1
-            return measure
-        return None
-
-    def complete(self):
-        return self.current_measure == len(self.byte_sequences_by_measure)
-
-    def reset(self):
-        self.current_measure = 0
-
-    def get_wav(self):
-        return self.wav
-
-
-class Vamp(Music):
-    """
-    Music file meant to be seamlessly and endlessly looped
-    overrides the step and is complete function
     """
 
-    def __init__(self, recording_key):
-        super().__init__(recording_key)
+    def __init__(self, recording_key, score_key):
+        super().__init__(recording_key, score_key)
         self.loops = 0
 
     def step(self) -> bytes | None:
@@ -133,12 +82,3 @@ class Vamp(Music):
 
     def complete(self):
         return False
-
-
-class Ornament(Music):
-    """
-    short, supplemental music file, triggered to play on top of a longer piece of audio
-    """
-
-    def __init__(self, recording_key):
-        super().__init__(recording_key)
