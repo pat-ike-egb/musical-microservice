@@ -1,19 +1,26 @@
-[project]
-name = "musical_microservice"
-version = "0.0.1"
-description = "Computational Music Service Processing and Streaming Service"
+[tool.poetry]
+name = "musical-microservice"
+version = "0.1.0"
+description = ""
+authors = ["pat ike egb <pat@egb.dev>"]
 readme = "README.md"
-requires-python = ">=3.10"
-authors = [
-  {name = "Pat I Egbuchulam", email = "pat@egb.dev" }
-]
-maintainers = [
-   {name = "Pat I Egbuchulam", email = "pat@egb.dev" }
-]
 
-[project.urls]
-"Source" = "https://github.com/pat-ike-egb/musical-microservice"
+[tool.poetry.dependencies]
+python = "^3.11"
+music21 = "^9.1.0"
+jmespath = "^1.0.1"
+grpcio = "^1.59.3"
+prisma = "^0.11.0"
+boto3 = "^1.33.12"
+pedalboard = "^0.8.7"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pre-commit = "^3.5.0"
+pytest-cov = "^4.1.0"
+moto = {extras = ["s3"], version = "^4.2.12"}
 
 [build-system]
-requires = ["setuptools>=43.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

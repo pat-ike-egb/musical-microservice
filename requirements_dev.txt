@@ -1,4 +1,0 @@
--r requirements.txt
-pre-commit~=3.3.3
-pyaudio~=0.2.13
-pytest==7.4.0

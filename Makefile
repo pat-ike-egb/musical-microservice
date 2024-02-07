@@ -1,7 +1,7 @@
 APP := musical_microservice
 
 test:
-	pytest
+	pytest -s
 
 cucumber:
 	@behave
