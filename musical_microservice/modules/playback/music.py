@@ -52,33 +52,3 @@ class Composition:
 
     def reset(self):
         self.current_measure = 0
-
-
-class Vamp(Composition):
-    """
-    Music file meant to be endlessly looped.
-
-    Rather than considering a vamp 'complete' we keep
-    track of the number of loops through all of its measures
-
-    """
-
-    def __init__(self, recording_key, score_key):
-        super().__init__(recording_key, score_key)
-        self.loops = 0
-
-    def step(self) -> bytes | None:
-        measure = self.byte_sequences_by_measure[self.current_measure]
-        self.current_measure += 1
-
-        if self.current_measure >= len(self.byte_sequences_by_measure):
-            self.current_measure = 0
-            self.loops += 1
-
-        return measure
-
-    def get_loops(self):
-        return self.loops
-
-    def complete(self):
-        return False

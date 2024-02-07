@@ -13,4 +13,12 @@ class MeasureTokenFeature(m21.features.FeatureExtractor):
         # TODO: PitchClassDistributionFeature
         # TODO: PrimaryRegisterFeature
         # TODO: SizeOfMelodicArcsFeature
+        # TODO: TensionFeature
+        # TODO: DissonanceFeature
+        # TODO: ConsonanceFeature
+        # TODO: CadentialLikelihoodFeature
+        # TODO: KeySignatureContextFeature
+        # TODO: TimeSignatureContextFeature
+        # TODO: TempoContextFeature
+        # TODO: NumberOfVoicesFeature
         pass
